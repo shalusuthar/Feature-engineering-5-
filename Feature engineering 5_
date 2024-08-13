@@ -1,0 +1,431 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "7870e377-c84a-4d83-ae8f-b33afefb15db",
+   "metadata": {},
+   "source": [
+    "Q1. What is the difference between Ordinal Encoding and Label Encoding? Provide an example of when you might choose one over the other.  \n",
+    "\n",
+    "Difference Between Ordinal Encoding and Label Encoding\n",
+    "\n",
+    "Ordinal Encoding and Label Encoding are both techniques used to convert categorical data into numerical values, but they serve different purposes and are used in different contexts.\n",
+    "\n",
+    "Ordinal Encoding\n",
+    "\n",
+    "Purpose: Preserves the ordinal relationship between categories.\n",
+    "\n",
+    "Method: Assigns ordinal integer values to categories based on their order.\n",
+    "\n",
+    "Use Case: Suitable for ordinal categorical features where the order matters.\n",
+    "\n",
+    "Example: Encoding temperature categories (cold, warm, hot) as 0, 1, 2.\n",
+    "\n",
+    "Label Encoding\n",
+    "\n",
+    "Purpose: Assigns unique integer labels to each category without considering any order.\n",
+    "\n",
+    "Method: Each category is assigned a unique integer.\n",
+    "\n",
+    "Use Case: Suitable for nominal categorical features where there is no inherent order.\n",
+    "\n",
+    "Example: Encoding color categories (red, blue, green) as 0, 1, 2.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "519fe83f-7959-4c42-bf15-9b47d6644c22",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original Data:\n",
+      "   satisfaction  satisfaction_encoded\n",
+      "0          low                   0.0\n",
+      "1       medium                   1.0\n",
+      "2         high                   2.0\n",
+      "3       medium                   1.0\n",
+      "4          low                   0.0\n",
+      "Encoded Data:\n",
+      " 0    0.0\n",
+      "1    1.0\n",
+      "2    2.0\n",
+      "3    1.0\n",
+      "4    0.0\n",
+      "Name: satisfaction_encoded, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "from sklearn.preprocessing import OrdinalEncoder\n",
+    "\n",
+    "# Sample data\n",
+    "data = pd.DataFrame({'satisfaction': ['low', 'medium', 'high', 'medium', 'low']})\n",
+    "\n",
+    "# Initialize the OrdinalEncoder\n",
+    "encoder = OrdinalEncoder(categories=[['low', 'medium', 'high']])\n",
+    "\n",
+    "# Fit and transform the data\n",
+    "encoded_data = encoder.fit_transform(data[['satisfaction']])\n",
+    "\n",
+    "# Add the encoded data to the DataFrame\n",
+    "data['satisfaction_encoded'] = encoded_data\n",
+    "\n",
+    "print(\"Original Data:\\n\", data)\n",
+    "print(\"Encoded Data:\\n\", data['satisfaction_encoded'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9a54bfad-a797-469a-9733-f7f2c2eefa27",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "ab9664f0-4c94-4d36-bab0-1c5e95342d0d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original Data:\n",
+      "   species  species_encoded\n",
+      "0     cat                0\n",
+      "1     dog                1\n",
+      "2  rabbit                2\n",
+      "3     dog                1\n",
+      "4     cat                0\n",
+      "Encoded Data:\n",
+      " 0    0\n",
+      "1    1\n",
+      "2    2\n",
+      "3    1\n",
+      "4    0\n",
+      "Name: species_encoded, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "from sklearn.preprocessing import LabelEncoder\n",
+    "\n",
+    "# Sample data\n",
+    "data = pd.DataFrame({'species': ['cat', 'dog', 'rabbit', 'dog', 'cat']})\n",
+    "\n",
+    "# Initialize the LabelEncoder\n",
+    "encoder = LabelEncoder()\n",
+    "\n",
+    "# Fit and transform the data\n",
+    "encoded_data = encoder.fit_transform(data['species'])\n",
+    "\n",
+    "# Add the encoded data to the DataFrame\n",
+    "data['species_encoded'] = encoded_data\n",
+    "\n",
+    "print(\"Original Data:\\n\", data)\n",
+    "print(\"Encoded Data:\\n\", data['species_encoded'])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c5d2a371-7162-4bf1-a57c-3a28547bb30a",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "dd922983-3ca4-4191-a801-fa94ab2fc770",
+   "metadata": {},
+   "source": [
+    "Q2. Explain how Target Guided Ordinal Encoding works and provide an example of when you might use it in a machine learning project.  \n",
+    "\n",
+    "Target Guided Ordinal Encoding\n",
+    "\n",
+    "Target Guided Ordinal Encoding is a technique used to encode categorical variables based on the relationship between the categories and the target variable. This method assigns ordinal values to categories by considering the mean (or another statistic) of the target variable for each category. It is particularly useful when there is a strong relationship between the categorical feature and the target variable.\n",
+    "\n",
+    "\n",
+    "How Target Guided Ordinal Encoding Works\n",
+    "\n",
+    "Calculate the Mean of the Target Variable: For each category in the categorical feature, calculate the mean of the target variable.\n",
+    "\n",
+    "Sort Categories: Sort the categories based on the calculated mean values.\n",
+    "\n",
+    "Assign Ordinal Values: Assign ordinal values to the categories based on their sorted order."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "4e871d93-198d-42b3-8771-c65ac3991a14",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "# Sample data\n",
+    "data = pd.DataFrame({\n",
+    "    'Employee_ID': ['A100', 'A101', 'A102', 'B101', 'B102', 'C100', 'D103'],\n",
+    "    'City': ['Delhi', 'Delhi', 'Mumbai', 'Pune', 'Kolkata', 'Pune', 'Kolkata'],\n",
+    "    'Salary': [50000, 30000, 45000, 25000, 48000, 30000, 44000]\n",
+    "})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "0c997ebd-a52d-4347-820d-2fd5f14b7412",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "City\n",
+      "Pune       27500.0\n",
+      "Delhi      40000.0\n",
+      "Mumbai     45000.0\n",
+      "Kolkata    46000.0\n",
+      "Name: Salary, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "mean_salary = data.groupby('City')['Salary'].mean().sort_values()\n",
+    "print(mean_salary)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "a742b822-e2ae-47f4-af30-f129d6945a53",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'Pune': 1, 'Delhi': 2, 'Mumbai': 3, 'Kolkata': 4}\n"
+     ]
+    }
+   ],
+   "source": [
+    "ordinal_mapping = {city: rank for rank, city in enumerate(mean_salary.index, 1)}\n",
+    "print(ordinal_mapping)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "0b85b46d-def1-4fa3-9139-ddeb31449ed1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "  Employee_ID     City  Salary  City_Encoded\n",
+      "0        A100    Delhi   50000             2\n",
+      "1        A101    Delhi   30000             2\n",
+      "2        A102   Mumbai   45000             3\n",
+      "3        B101     Pune   25000             1\n",
+      "4        B102  Kolkata   48000             4\n",
+      "5        C100     Pune   30000             1\n",
+      "6        D103  Kolkata   44000             4\n"
+     ]
+    }
+   ],
+   "source": [
+    "data['City_Encoded'] = data['City'].map(ordinal_mapping)\n",
+    "print(data)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8a9740b2-e18d-4227-8d58-bc09400f7042",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8c70604a-8113-4b54-989e-ca6404d0ad6b",
+   "metadata": {},
+   "source": [
+    "Q3. Define covariance and explain why it is important in statistical analysis. How is covariance calculated?  \n",
+    "\n",
+    "Covariance\n",
+    "\n",
+    "Covariance is a statistical measure that indicates the extent to which two random variables change together. It is used to determine whether an increase in one variable corresponds to an increase or decrease in another variable. Covariance can be positive, negative, or zero:\n",
+    "\n",
+    "Positive Covariance: Indicates that as one variable increases, the other variable tends to increase as well.\n",
+    "\n",
+    "Negative Covariance: Indicates that as one variable increases, the other variable tends to decrease.\n",
+    "\n",
+    "Zero Covariance: Indicates no linear relationship between the variables.\n",
+    "\n",
+    "Importance of Covariance in Statistical Analysis\n",
+    "\n",
+    "Relationship Identification: Covariance helps in identifying the direction of the linear relationship between two variables.\n",
+    "\n",
+    "Portfolio Theory: In finance, covariance is used to understand how different assets move together, which is crucial for portfolio diversification.\n",
+    "\n",
+    "Principal Component Analysis (PCA): Covariance is used in PCA to identify the principal components that capture the most variance in the data.\n",
+    "\n",
+    "Feature Selection: Covariance can help in selecting features that have strong relationships with the target variable.\n",
+    "\n",
+    "How Covariance is Calculated\n",
+    "\n",
+    "The covariance between two variables (X) and (Y) is calculated using the following formula:\n",
+    "Cov(X,Y)=∑i=1(Xi−Xˉ)(Yi−Yˉ)/n-1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "289b6c63-7438-47a5-a2ce-928a9bbace1e",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "15a785a7-d520-4a67-b397-b5389dd42d36",
+   "metadata": {},
+   "source": [
+    "Q4. For a dataset with the following categorical variables: Color (red, green, blue), Size (small, medium, large), and Material (wood, metal, plastic), perform label encoding using Python's scikit-learn library. Show your code and explain the output.  \n",
+    "\n",
+    "Label Encoding Using Python’s scikit-learn Library\n",
+    "\n",
+    "Label encoding is a technique used to convert categorical variables into numerical values. Here’s how you can perform label encoding on a dataset with the categorical variables: Color (red, green, blue), Size (small, medium, large), and Material (wood, metal, plastic).\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "1bbe8f35-6caa-4692-bec8-cd3481e6db84",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "from sklearn.preprocessing import LabelEncoder"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "e6a202df-c9b5-477b-a371-b419f7a9b43e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.DataFrame({\n",
+    "    'Color': ['red', 'green', 'blue', 'green', 'red'],\n",
+    "    'Size': ['small', 'medium', 'large', 'small', 'large'],\n",
+    "    'Material': ['wood', 'metal', 'plastic', 'wood', 'metal']\n",
+    "})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "6d23ece1-9fc1-4ed6-8e37-1be6a03d84a3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "encoder = LabelEncoder()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "ccf18d61-9551-447c-9d75-258513a447a8",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original Data:\n",
+      "    Color    Size Material  Color_Encoded  Size_Encoded  Material_Encoded\n",
+      "0    red   small     wood              2             2                 2\n",
+      "1  green  medium    metal              1             1                 0\n",
+      "2   blue   large  plastic              0             0                 1\n",
+      "3  green   small     wood              1             2                 2\n",
+      "4    red   large    metal              2             0                 0\n",
+      "Encoded Data:\n",
+      "    Color_Encoded  Size_Encoded  Material_Encoded\n",
+      "0              2             2                 2\n",
+      "1              1             1                 0\n",
+      "2              0             0                 1\n",
+      "3              1             2                 2\n",
+      "4              2             0                 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "data['Color_Encoded'] = encoder.fit_transform(data['Color'])\n",
+    "data['Size_Encoded'] = encoder.fit_transform(data['Size'])\n",
+    "data['Material_Encoded'] = encoder.fit_transform(data['Material'])\n",
+    "\n",
+    "print(\"Original Data:\\n\", data)\n",
+    "print(\"Encoded Data:\\n\", data[['Color_Encoded', 'Size_Encoded', 'Material_Encoded']])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7c22c773-9d20-417c-ad30-150785aec622",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b9f6fc5b-5576-46e5-adfd-97dcaa06de20",
+   "metadata": {},
+   "source": [
+    "Q6. You are working on a machine learning project with a dataset containing several categorical variables, including \"Gender\" (Male/Female), \"Education Level\" (High School/Bachelor's/Master's/PhD), and \"Employment Status\" (Unemployed/Part-Time/Full-Time). Which encoding method would you use for each variable, and why?  \n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0d1f7684-971f-4b9f-84c6-d272bddce866",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
